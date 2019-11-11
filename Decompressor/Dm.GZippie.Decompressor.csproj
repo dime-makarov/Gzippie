@@ -4,61 +4,49 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C6AC857E-4925-47EB-87C3-B6C1A130321D}</ProjectGuid>
-    <OutputType>Exe</OutputType>
-    <RootNamespace>Dm.GZippie.App</RootNamespace>
-    <AssemblyName>Dm.GZippie.App</AssemblyName>
+    <ProjectGuid>{D015B7CA-1D75-4A58-B5E3-A0D1E39888C6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Dm.GZippie.Decompressor</RootNamespace>
+    <AssemblyName>Dm.GZippie.Decompressor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <Deterministic>true</Deterministic>
     <OutputPath>..\Bin\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="GZipDecompressor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Compressor\Dm.GZippie.Compressor.csproj">
-      <Project>{d43de7e6-f465-4227-b3e9-346afe4568d4}</Project>
-      <Name>Dm.GZippie.Compressor</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Contract\Dm.GZippie.Contract.csproj">
       <Project>{c224a433-c6b2-434d-911f-4ad4c954c0b7}</Project>
       <Name>Dm.GZippie.Contract</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Decompressor\Dm.GZippie.Decompressor.csproj">
-      <Project>{d015b7ca-1d75-4a58-b5e3-a0d1e39888c6}</Project>
-      <Name>Dm.GZippie.Decompressor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

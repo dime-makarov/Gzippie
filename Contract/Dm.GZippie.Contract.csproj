@@ -40,6 +40,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompressBlockInfo.cs" />
+    <Compile Include="DecompressBlockInfo.cs" />
     <Compile Include="IDecompressor.cs" />
     <Compile Include="ICompressor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

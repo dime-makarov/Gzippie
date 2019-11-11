@@ -1,5 +1,7 @@
 ﻿using System;
 using Dm.GZippie.Contract;
+using Dm.GZippie.Compressor;
+using Dm.GZippie.Decompressor;
 
 namespace Dm.GZippie.App
 {

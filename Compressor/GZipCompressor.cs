@@ -5,7 +5,7 @@ using System.IO.Compression;
 using System.Threading;
 using Dm.GZippie.Contract;
 
-namespace Dm.GZippie.App
+namespace Dm.GZippie.Compressor
 {
     public class GZipCompressor : ICompressor
     {

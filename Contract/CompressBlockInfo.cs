@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Dm.GZippie.App
+namespace Dm.GZippie.Contract
 {
     public class CompressBlockInfo
     {
