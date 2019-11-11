@@ -3,24 +3,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
+using Dm.GZippie.Contract;
 
 namespace Dm.GZippie.App
 {
-    public class GZipDecompressor : IDisposable
+    public class GZipDecompressor : IDecompressor
     {
         protected string SrcPath;
         protected string DestPath;
         protected List<DecompressBlockInfo> Blocks;
         protected List<Thread> Threads;
 
-        public GZipDecompressor(string srcPath, string destPath)
+        public void Decompress(string sourcePath, string destinationPath)
         {
-            SrcPath = srcPath;
-            DestPath = destPath;
-        }
+            SrcPath = sourcePath;
+            DestPath = destinationPath;
 
-        public void Decompress()
-        {
             Blocks = BuildDecompressBlockInfo();
             Threads = new List<Thread>();
 

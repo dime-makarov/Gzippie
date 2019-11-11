@@ -1,4 +1,5 @@
 ﻿using System;
+using Dm.GZippie.Contract;
 
 namespace Dm.GZippie.App
 {
@@ -25,18 +26,18 @@ namespace Dm.GZippie.App
             //string srcPath = @"D:\Dox\bookmarks.html";
             //string destPath = @"D:\Dox\bookmarks_compressed.html";
             //
-            //using (GZipCompressor cmpr = new GZipCompressor(srcPath, destPath))
+            //using (ICompressor cmpr = new GZipCompressor())
             //{
-            //    cmpr.Compress();
+            //    cmpr.Compress(srcPath, destPath);
             //}
 
 
             string srcPath = @"D:\Dox\bookmarks_compressed.html";
             string destPath = @"D:\Dox\bookmarks_decompressed.html";
             
-            using (GZipDecompressor dcmpr = new GZipDecompressor(srcPath, destPath))
+            using (IDecompressor dcmpr = new GZipDecompressor())
             {
-                dcmpr.Decompress();
+                dcmpr.Decompress(srcPath, destPath);
             }
         }
     }
