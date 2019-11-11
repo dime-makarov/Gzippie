@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 
-namespace Dm.GZippie.Contract
+namespace Dm.Gzippie.Contract
 {
     public class DecompressBlockInfo
     {

@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{C6AC857E-4925-47EB-87C3-B6C1A130321D}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Dm.GZippie.App</RootNamespace>
-    <AssemblyName>Dm.GZippie.App</AssemblyName>
+    <RootNamespace>Dm.Gzippie.App</RootNamespace>
+    <AssemblyName>Dm.Gzippie.App</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -48,17 +48,17 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Compressor\Dm.GZippie.Compressor.csproj">
+    <ProjectReference Include="..\Compressor\Dm.Gzippie.Compressor.csproj">
       <Project>{d43de7e6-f465-4227-b3e9-346afe4568d4}</Project>
-      <Name>Dm.GZippie.Compressor</Name>
+      <Name>Dm.Gzippie.Compressor</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Contract\Dm.GZippie.Contract.csproj">
+    <ProjectReference Include="..\Contract\Dm.Gzippie.Contract.csproj">
       <Project>{c224a433-c6b2-434d-911f-4ad4c954c0b7}</Project>
-      <Name>Dm.GZippie.Contract</Name>
+      <Name>Dm.Gzippie.Contract</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Decompressor\Dm.GZippie.Decompressor.csproj">
+    <ProjectReference Include="..\Decompressor\Dm.Gzippie.Decompressor.csproj">
       <Project>{d015b7ca-1d75-4a58-b5e3-a0d1e39888c6}</Project>
-      <Name>Dm.GZippie.Decompressor</Name>
+      <Name>Dm.Gzippie.Decompressor</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

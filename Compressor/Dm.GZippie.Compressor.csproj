@@ -7,8 +7,8 @@
     <ProjectGuid>{D43DE7E6-F465-4227-B3E9-346AFE4568D4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dm.GZippie.Compressor</RootNamespace>
-    <AssemblyName>Dm.GZippie.Compressor</AssemblyName>
+    <RootNamespace>Dm.Gzippie.Compressor</RootNamespace>
+    <AssemblyName>Dm.Gzippie.Compressor</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -44,9 +44,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Contract\Dm.GZippie.Contract.csproj">
+    <ProjectReference Include="..\Contract\Dm.Gzippie.Contract.csproj">
       <Project>{c224a433-c6b2-434d-911f-4ad4c954c0b7}</Project>
-      <Name>Dm.GZippie.Contract</Name>
+      <Name>Dm.Gzippie.Contract</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

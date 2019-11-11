@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Dm.GZippie.Contract
+namespace Dm.Gzippie.Contract
 {
     public interface ICompressor : IDisposable
     {

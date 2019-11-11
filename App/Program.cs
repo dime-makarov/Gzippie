@@ -1,9 +1,9 @@
 ﻿using System;
-using Dm.GZippie.Contract;
-using Dm.GZippie.Compressor;
-using Dm.GZippie.Decompressor;
+using Dm.Gzippie.Contract;
+using Dm.Gzippie.Compressor;
+using Dm.Gzippie.Decompressor;
 
-namespace Dm.GZippie.App
+namespace Dm.Gzippie.App
 {
     public class Program
     {

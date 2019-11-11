@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.GZippie.App", "App\Dm.GZippie.App.csproj", "{C6AC857E-4925-47EB-87C3-B6C1A130321D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.Gzippie.App", "App\Dm.Gzippie.App.csproj", "{C6AC857E-4925-47EB-87C3-B6C1A130321D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.GZippie.Contract", "Contract\Dm.GZippie.Contract.csproj", "{C224A433-C6B2-434D-911F-4AD4C954C0B7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.Gzippie.Contract", "Contract\Dm.Gzippie.Contract.csproj", "{C224A433-C6B2-434D-911F-4AD4C954C0B7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.GZippie.Compressor", "Compressor\Dm.GZippie.Compressor.csproj", "{D43DE7E6-F465-4227-B3E9-346AFE4568D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.Gzippie.Compressor", "Compressor\Dm.Gzippie.Compressor.csproj", "{D43DE7E6-F465-4227-B3E9-346AFE4568D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.GZippie.Decompressor", "Decompressor\Dm.GZippie.Decompressor.csproj", "{D015B7CA-1D75-4A58-B5E3-A0D1E39888C6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.Gzippie.Decompressor", "Decompressor\Dm.Gzippie.Decompressor.csproj", "{D015B7CA-1D75-4A58-B5E3-A0D1E39888C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

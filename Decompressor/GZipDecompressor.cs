@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Threading;
-using Dm.GZippie.Contract;
+using Dm.Gzippie.Contract;
 
-namespace Dm.GZippie.Decompressor
+namespace Dm.Gzippie.Decompressor
 {
     public class GZipDecompressor : IDecompressor
     {
