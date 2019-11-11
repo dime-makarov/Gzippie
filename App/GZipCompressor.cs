@@ -4,7 +4,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Threading;
 
-namespace GZipTest
+namespace Dm.GZippie.App
 {
     public class GZipCompressor : IDisposable
     {

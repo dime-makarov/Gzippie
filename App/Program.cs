@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GZipTest
+namespace Dm.GZippie.App
 {
     public class Program
     {

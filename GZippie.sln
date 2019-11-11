@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GZipTest", "GZipTest\GZipTest.csproj", "{C6AC857E-4925-47EB-87C3-B6C1A130321D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.GZippie.App", "App\Dm.GZippie.App.csproj", "{C6AC857E-4925-47EB-87C3-B6C1A130321D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
