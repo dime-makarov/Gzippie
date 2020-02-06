@@ -43,9 +43,6 @@ namespace Dm.Gzippie.Compressor
         {
             CompressBlockInfo block = (CompressBlockInfo)param;
 
-            long startPos = block.SequenceNumber * block.OriginalSizeInBytes;
-            long totalBytesToRead = block.OriginalSizeInBytes;
-
             // https://github.com/Microsoft/referencesource/blob/master/mscorlib/system/io/stream.cs#L50
             // We pick a value that is the largest multiple of 4096 that is still smaller than the large object heap threshold (85K).
             // The buffer is short-lived and is likely to be collected at Gen0, and it offers a significant improvement in performance.
@@ -60,11 +57,11 @@ namespace Dm.Gzippie.Compressor
                     {
                         for (; ; )
                         {
-                            long leftBytesToRead = totalBytesToRead - totalBytesRead;
+                            long leftBytesToRead = block.OriginalSizeInBytes - totalBytesRead;
                             long bytesToRead = Math.Min(leftBytesToRead, buffer.Length);
 
                             // Position
-                            srcStream.Position = startPos + totalBytesRead;
+                            srcStream.Position = block.StartPosition + totalBytesRead;
 
                             int bytesRead = srcStream.Read(buffer, 0, (int)bytesToRead); // cast to int is safe here.
 
@@ -99,6 +96,7 @@ namespace Dm.Gzippie.Compressor
             long quotinent = fi.Length / blockSize;
             long remainder = fi.Length % blockSize;
             List<CompressBlockInfo> blocks = new List<CompressBlockInfo>((int)quotinent + 1); // 32 Gb is 32000 Mb -> cast to int is safe here
+            long startPos = 0;
             int i;
 
             for (i = 0; i < quotinent; i++)
@@ -106,17 +104,21 @@ namespace Dm.Gzippie.Compressor
                 blocks.Add(new CompressBlockInfo
                 {
                     SequenceNumber = i,
+                    StartPosition = startPos,
                     OriginalSizeInBytes = blockSize,
                     SrcPath = SrcPath,
                     DestPath = DestPath,
                     TempPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()),
                     BlockProcessedEvent = new ManualResetEvent(false)
                 });
+
+                startPos += blockSize;
             }
 
             blocks.Add(new CompressBlockInfo
             {
                 SequenceNumber = i, // i is already increased
+                StartPosition = startPos,
                 OriginalSizeInBytes = remainder,
                 SrcPath = SrcPath,
                 DestPath = DestPath,

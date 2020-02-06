@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Text;
+using System.Threading;
 
 namespace Dm.Gzippie.Contract
 {
@@ -20,7 +21,18 @@ namespace Dm.Gzippie.Contract
 
         public override string ToString()
         {
-            return string.Format("{0} : {1} : {2}", StartPosition, SizeInBytes, TempPath2);
+            var sb = new StringBuilder();
+
+            sb.AppendLine("[");
+            sb.AppendLine($"    {nameof(SrcPath)}: {SrcPath}");
+            sb.AppendLine($"    {nameof(DestPath)}: {DestPath}");
+            sb.AppendLine($"    {nameof(TempPath1)}: {TempPath1}");
+            sb.AppendLine($"    {nameof(TempPath2)}: {TempPath2}");
+            sb.AppendLine($"    {nameof(StartPosition)}: {StartPosition}");
+            sb.AppendLine($"    {nameof(SizeInBytes)}: {SizeInBytes}");
+            sb.AppendLine("]");
+
+            return sb.ToString();
         }
     }
 }

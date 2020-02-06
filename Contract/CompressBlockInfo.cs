@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Text;
+using System.Threading;
 
 namespace Dm.Gzippie.Contract
 {
@@ -9,6 +10,11 @@ namespace Dm.Gzippie.Contract
         /// </summary>
         public long SequenceNumber;
 
+        /// <summary>
+        /// Start position in original file
+        /// </summary>
+        public long StartPosition;
+        
         /// <summary>
         /// Block size in bytes
         /// </summary>
@@ -42,7 +48,19 @@ namespace Dm.Gzippie.Contract
 
         public override string ToString()
         {
-            return string.Format("{0} : {1} : {2}", SequenceNumber, OriginalSizeInBytes, TempPath);
+            var sb = new StringBuilder();
+
+            sb.AppendLine("[");
+            sb.AppendLine($"    {nameof(SequenceNumber)}: {SequenceNumber}");
+            sb.AppendLine($"    {nameof(StartPosition)}: {StartPosition}");
+            sb.AppendLine($"    {nameof(OriginalSizeInBytes)}: {OriginalSizeInBytes}");
+            sb.AppendLine($"    {nameof(CompressedSizeInBytes)}: {CompressedSizeInBytes}");
+            sb.AppendLine($"    {nameof(SrcPath)}: {SrcPath}");
+            sb.AppendLine($"    {nameof(DestPath)}: {DestPath}");
+            sb.AppendLine($"    {nameof(TempPath)}: {TempPath}");
+            sb.AppendLine("]");
+
+            return sb.ToString();
         }
     }
 }

@@ -61,6 +61,8 @@ namespace Dm.Gzippie.App
                 return 1;
             }
 
+            Console.WriteLine("Press Enter key to continue...");
+            Console.ReadLine();
             return 0;
         }
 
