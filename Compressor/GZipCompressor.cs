@@ -13,6 +13,8 @@ namespace Dm.Gzippie.Compressor
         private string _destPath;
         private List<CompressBlockInfo> _blocks;
 
+        private const int MaxThreads = 4;
+
         public event Action<TimeSpan> OnCompleted;
 
         /// <summary>
@@ -87,9 +89,9 @@ namespace Dm.Gzippie.Compressor
         {
             FileInfo fi = new FileInfo(_srcPath);
 
-            // TODO: Calculate via max threads etc.
+            long size = fi.Length / MaxThreads;
 
-            return 64000;
+            return size + 1;
         }
 
         private List<CompressBlockInfo> BuildBlockInfoList(long blockSize)
