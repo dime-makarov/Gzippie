@@ -7,35 +7,35 @@ using Dm.Gzippie.Contract;
 
 namespace Dm.Gzippie.Compressor
 {
-    public class GZipCompressor : ICompressor
+    public sealed class GZipCompressor : ICompressor
     {
-        protected string SrcPath;
-        protected string DestPath;
-        protected List<CompressBlockInfo> Blocks;
+        private string _srcPath;
+        private string _destPath;
+        private List<CompressBlockInfo> _blocks;
 
         /// <summary>
         /// Compress
         /// </summary>
-        public virtual void Compress(string sourcePath, string destinationPath)
+        public void Compress(string sourcePath, string destinationPath)
         {
-            SrcPath = sourcePath;
-            DestPath = destinationPath;
+            _srcPath = sourcePath;
+            _destPath = destinationPath;
 
             long blockSize = CalculateBlockSize();
-            Blocks = BuildBlockInfoList(blockSize);
+            _blocks = BuildBlockInfoList(blockSize);
 
-            foreach (CompressBlockInfo block in Blocks)
+            foreach (CompressBlockInfo block in _blocks)
             {
                 ThreadPool.QueueUserWorkItem(CompressThreadFunc, block);
             }
 
             Thread thrOutput = new Thread(OutputThreadFunc);
-            thrOutput.Start(Blocks);
+            thrOutput.Start(_blocks);
             thrOutput.Join();
         }
 
 
-        protected virtual void CompressThreadFunc(object param)
+        private void CompressThreadFunc(object param)
         {
             CompressBlockInfo block = (CompressBlockInfo)param;
 
@@ -67,8 +67,6 @@ namespace Dm.Gzippie.Compressor
 
                             gzipStream.Write(buffer, 0, bytesRead);
                         }
-
-                        // block.CompressedSizeInBytes = destStream.Length;
                     }
                 }
             }
@@ -77,18 +75,18 @@ namespace Dm.Gzippie.Compressor
             block.BlockProcessedEvent.Set();
         }
 
-        protected virtual long CalculateBlockSize()
+        private long CalculateBlockSize()
         {
-            FileInfo fi = new FileInfo(SrcPath);
+            FileInfo fi = new FileInfo(_srcPath);
 
             // TODO: Calculate via max threads etc.
 
             return 64000;
         }
 
-        protected virtual List<CompressBlockInfo> BuildBlockInfoList(long blockSize)
+        private List<CompressBlockInfo> BuildBlockInfoList(long blockSize)
         {
-            FileInfo fi = new FileInfo(SrcPath);
+            FileInfo fi = new FileInfo(_srcPath);
             long quotinent = fi.Length / blockSize;
             long remainder = fi.Length % blockSize;
             List<CompressBlockInfo> blocks = new List<CompressBlockInfo>((int)quotinent + 1); // 32 Gb is 32000 Mb -> cast to int is safe here
@@ -102,8 +100,8 @@ namespace Dm.Gzippie.Compressor
                     SequenceNumber = i,
                     StartPosition = startPos,
                     OriginalSizeInBytes = blockSize,
-                    SrcPath = SrcPath,
-                    DestPath = DestPath,
+                    SrcPath = _srcPath,
+                    DestPath = _destPath,
                     TempPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()),
                     BlockProcessedEvent = new ManualResetEvent(false)
                 });
@@ -116,8 +114,8 @@ namespace Dm.Gzippie.Compressor
                 SequenceNumber = i, // i is already increased
                 StartPosition = startPos,
                 OriginalSizeInBytes = remainder,
-                SrcPath = SrcPath,
-                DestPath = DestPath,
+                SrcPath = _srcPath,
+                DestPath = _destPath,
                 TempPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()),
                 BlockProcessedEvent = new ManualResetEvent(false)
             });
@@ -126,7 +124,7 @@ namespace Dm.Gzippie.Compressor
         }
 
 
-        protected virtual void OutputThreadFunc(object param)
+        private void OutputThreadFunc(object param)
         {
             if (param == null)
             {
@@ -194,9 +192,9 @@ namespace Dm.Gzippie.Compressor
 
         public void Dispose()
         {
-            if (Blocks != null)
+            if (_blocks != null)
             {
-                foreach(CompressBlockInfo block in Blocks)
+                foreach(CompressBlockInfo block in _blocks)
                 {
                     try
                     {
@@ -208,7 +206,7 @@ namespace Dm.Gzippie.Compressor
                     }
                 }
 
-                Blocks = null;
+                _blocks = null;
             }
         }
     }
