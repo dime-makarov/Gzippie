@@ -12,7 +12,6 @@ namespace Dm.Gzippie.Compressor
         protected string SrcPath;
         protected string DestPath;
         protected List<CompressBlockInfo> Blocks;
-        protected List<Thread> Threads;
 
         /// <summary>
         /// Compress
@@ -24,13 +23,10 @@ namespace Dm.Gzippie.Compressor
 
             long blockSize = CalculateBlockSize();
             Blocks = BuildBlockInfoList(blockSize);
-            Threads = new List<Thread>();
 
             foreach (CompressBlockInfo block in Blocks)
             {
-                Thread thr = new Thread(CompressThreadFunc);
-                Threads.Add(thr);
-                thr.Start(block);
+                ThreadPool.QueueUserWorkItem(CompressThreadFunc, block);
             }
 
             Thread thrOutput = new Thread(OutputThreadFunc);
