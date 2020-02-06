@@ -70,6 +70,7 @@ namespace Dm.Gzippie.App
         {
             using (ICompressor cmpr = new GZipCompressor())
             {
+                cmpr.OnCompleted += CompressionCompleted;
                 cmpr.Compress(srcPath, destPath);
             }
         }
@@ -80,6 +81,11 @@ namespace Dm.Gzippie.App
             {
                 dcmpr.Decompress(srcPath, destPath);
             }
+        }
+
+        private void CompressionCompleted(TimeSpan duration)
+        {
+            Console.WriteLine("Compression completed in {0} ms", duration.TotalMilliseconds);
         }
     }
 }

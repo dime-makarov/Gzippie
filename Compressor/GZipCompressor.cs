@@ -13,6 +13,8 @@ namespace Dm.Gzippie.Compressor
         private string _destPath;
         private List<CompressBlockInfo> _blocks;
 
+        public event Action<TimeSpan> OnCompleted;
+
         /// <summary>
         /// Compress
         /// </summary>
@@ -24,6 +26,8 @@ namespace Dm.Gzippie.Compressor
             long blockSize = CalculateBlockSize();
             _blocks = BuildBlockInfoList(blockSize);
 
+            var t1 = DateTime.Now;
+
             foreach (CompressBlockInfo block in _blocks)
             {
                 ThreadPool.QueueUserWorkItem(CompressThreadFunc, block);
@@ -32,6 +36,10 @@ namespace Dm.Gzippie.Compressor
             Thread thrOutput = new Thread(OutputThreadFunc);
             thrOutput.Start(_blocks);
             thrOutput.Join();
+
+            var t2 = DateTime.Now;
+
+            OnCompleted?.Invoke(t2 - t1);
         }
 
 
