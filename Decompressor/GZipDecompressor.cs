@@ -75,8 +75,8 @@ namespace Dm.Gzippie.Decompressor
                         DestPath = this._destPath,
                         StartPosition = currStartPos,
                         SizeInBytes = blockSize,
-                        TempPath1 = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()),
-                        TempPath2 = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()),
+                        // TempPath1 will be filled in the process of compression 
+                        // TempPath2 will be filled in the process of compression
                         BlockProcessedEvent = new ManualResetEvent(false)
                     });
 
@@ -107,6 +107,8 @@ namespace Dm.Gzippie.Decompressor
             // Extract part from source compressed file
             using (FileStream srcStream = new FileStream(block.SrcPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
+                block.TempPath2 = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
+
                 using (FileStream destStream = new FileStream(block.TempPath2, FileMode.OpenOrCreate))
                 {
                     for (; ; )
@@ -133,6 +135,8 @@ namespace Dm.Gzippie.Decompressor
             {
                 using (GZipStream gzipStream = new GZipStream(srcStream, CompressionMode.Decompress))
                 {
+                    block.TempPath1 = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
+
                     using (FileStream destStream = new FileStream(block.TempPath1, FileMode.OpenOrCreate))
                     {
                         for (; ; )
