@@ -9,25 +9,35 @@ namespace Dm.Gzippie.Compressor
 {
     public sealed class GZipCompressor : ICompressor
     {
-        private string _srcPath;
-        private string _destPath;
-        private List<CompressBlockInfo> _blocks;
-
-        private const int MaxThreads = 4;
-
-        public event Action<TimeSpan> OnCompleted;
-
+        /// <summary>
+        /// Ctor.
+        /// </summary>
+        /// <param name="sourcePath">Path to the file to compress.</param>
+        /// <param name="destinationPath">Path to the file where to compress to.</param>
         public GZipCompressor(string sourcePath, string destinationPath)
         {
             _srcPath = sourcePath;
             _destPath = destinationPath;
-
-            long blockSize = CalculateBlockSize();
-            _blocks = BuildBlockInfoList(blockSize);
+            _blocks = BuildBlockInfoList();
         }
 
         /// <summary>
-        /// Compress
+        /// Compression completed event.
+        /// </summary>
+        public event Action<TimeSpan> OnCompleted;
+
+        /// <summary>
+        /// Max number of compression threads.
+        /// </summary>
+        private const int MaxThreads = 4;
+
+        private string _srcPath;
+        private string _destPath;
+        private List<CompressBlockInfo> _blocks;
+ 
+
+        /// <summary>
+        /// Main compression method.
         /// </summary>
         public void Compress()
         {
@@ -47,64 +57,18 @@ namespace Dm.Gzippie.Compressor
             OnCompleted?.Invoke(t2 - t1);
         }
 
-
-        private void CompressThreadFunc(object param)
+        /// <summary>
+        /// Builds list of source file compression blocks.
+        /// </summary>
+        /// <remarks>Each compression block will be compressed in separate thread.</remarks>
+        private List<CompressBlockInfo> BuildBlockInfoList()
         {
-            CompressBlockInfo block = (CompressBlockInfo)param;
+            long blockSize = CalculateBlockSize();
 
-            // https://github.com/Microsoft/referencesource/blob/master/mscorlib/system/io/stream.cs#L50
-            // We pick a value that is the largest multiple of 4096 that is still smaller than the large object heap threshold (85K).
-            // The buffer is short-lived and is likely to be collected at Gen0, and it offers a significant improvement in performance.
-            byte[] buffer = new byte[81920];
-            long totalBytesRead = 0;
-
-            using (FileStream srcStream = new FileStream(block.SrcPath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            {
-                block.TempPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
-
-                using (FileStream destStream = new FileStream(block.TempPath, FileMode.OpenOrCreate))
-                {
-                    using (GZipStream gzipStream = new GZipStream(destStream, CompressionMode.Compress))
-                    {
-                        for (; ; )
-                        {
-                            long leftBytesToRead = block.OriginalSizeInBytes - totalBytesRead;
-                            long bytesToRead = Math.Min(leftBytesToRead, buffer.Length);
-
-                            // Position
-                            srcStream.Position = block.StartPosition + totalBytesRead;
-
-                            int bytesRead = srcStream.Read(buffer, 0, (int)bytesToRead); // cast to int is safe here.
-
-                            if (bytesRead == 0) break;
-
-                            totalBytesRead += bytesRead;
-
-                            gzipStream.Write(buffer, 0, bytesRead);
-                        }
-                    }
-                }
-            }
-
-            // Set event for output thread
-            block.BlockProcessedEvent.Set();
-        }
-
-        private long CalculateBlockSize()
-        {
-            FileInfo fi = new FileInfo(_srcPath);
-
-            long size = fi.Length / MaxThreads;
-
-            return size + 1;
-        }
-
-        private List<CompressBlockInfo> BuildBlockInfoList(long blockSize)
-        {
             FileInfo fi = new FileInfo(_srcPath);
             long quotinent = fi.Length / blockSize;
             long remainder = fi.Length % blockSize;
-            List<CompressBlockInfo> blocks = new List<CompressBlockInfo>((int)quotinent + 1); // 32 Gb is 32000 Mb -> cast to int is safe here
+            List<CompressBlockInfo> blocks = new List<CompressBlockInfo>((int)quotinent + 1); // cast to int is safe here
             long startPos = 0;
             int i;
 
@@ -138,7 +102,67 @@ namespace Dm.Gzippie.Compressor
             return blocks;
         }
 
+        /// <summary>
+        /// Calculates the size of one compression block.
+        /// </summary>
+        private long CalculateBlockSize()
+        {
+            FileInfo fi = new FileInfo(_srcPath);
 
+            long size = fi.Length / MaxThreads;
+
+            return size + 1;
+        }
+
+        /// <summary>
+        /// Compresses one given block of source file.
+        /// </summary>
+        /// <param name="param">Instance of <see cref="CompressBlockInfo"/> class.</param>
+        private void CompressThreadFunc(object param)
+        {
+            CompressBlockInfo block = (CompressBlockInfo)param;
+
+            // https://github.com/Microsoft/referencesource/blob/master/mscorlib/system/io/stream.cs#L50
+            // We pick a value that is the largest multiple of 4096 that is still smaller than the large object heap threshold (85K).
+            // The buffer is short-lived and is likely to be collected at Gen0, and it offers a significant improvement in performance.
+            byte[] buffer = new byte[81920];
+            long totalBytesRead = 0;
+
+            using (FileStream srcStream = new FileStream(block.SrcPath, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                block.TempPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
+
+                using (FileStream destStream = new FileStream(block.TempPath, FileMode.OpenOrCreate))
+                {
+                    using (GZipStream gzipStream = new GZipStream(destStream, CompressionMode.Compress))
+                    {
+                        for (; ; )
+                        {
+                            long leftBytesToRead = block.OriginalSizeInBytes - totalBytesRead;
+                            long bytesToRead = Math.Min(leftBytesToRead, buffer.Length);
+
+                            srcStream.Position = block.StartPosition + totalBytesRead;
+
+                            int bytesRead = srcStream.Read(buffer, 0, (int)bytesToRead); // cast to int is safe here.
+
+                            if (bytesRead == 0) break;
+
+                            totalBytesRead += bytesRead;
+
+                            gzipStream.Write(buffer, 0, bytesRead);
+                        }
+                    }
+                }
+            }
+
+            // Set event for output thread
+            block.BlockProcessedEvent.Set();
+        }
+
+        /// <summary>
+        /// Output results of block compression to destination file.
+        /// </summary>
+        /// <param name="param">List of compression blocks.</param>
         private void OutputThreadFunc(object param)
         {
             if (param == null)
@@ -169,7 +193,6 @@ namespace Dm.Gzippie.Compressor
                 {
                     outStream.Write(zeros, 0, zeros.Length);
                 }
-
 
                 byte[] buffer = new byte[81920];
 
@@ -204,7 +227,9 @@ namespace Dm.Gzippie.Compressor
             }
         }
         
-
+        /// <summary>
+        /// Dispose logic.
+        /// </summary>
         public void Dispose()
         {
             if (_blocks != null)
