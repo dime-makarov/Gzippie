@@ -4,6 +4,8 @@ namespace Dm.Gzippie.Contract
 {
     public interface IDecompressor : IDisposable
     {
-        void Decompress(string sourcePath, string destinationPath);
+        void Decompress();
+
+        event Action<TimeSpan> OnCompleted;
     }
 }

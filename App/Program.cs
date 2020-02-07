@@ -77,15 +77,21 @@ namespace Dm.Gzippie.App
 
         public virtual void Decompress(string srcPath, string destPath)
         {
-            using (IDecompressor dcmpr = new GZipDecompressor())
+            using (IDecompressor dcmpr = new GZipDecompressor(srcPath, destPath))
             {
-                dcmpr.Decompress(srcPath, destPath);
+                dcmpr.OnCompleted += DecompressionCompleted;
+                dcmpr.Decompress();
             }
         }
 
         private void CompressionCompleted(TimeSpan duration)
         {
             Console.WriteLine("Compression completed in {0} ms", duration.TotalMilliseconds);
+        }
+
+        private void DecompressionCompleted(TimeSpan duration)
+        {
+            Console.WriteLine("Decompression completed in {0} ms", duration.TotalMilliseconds);
         }
     }
 }

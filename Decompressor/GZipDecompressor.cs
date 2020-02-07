@@ -7,40 +7,55 @@ using Dm.Gzippie.Contract;
 
 namespace Dm.Gzippie.Decompressor
 {
-    public class GZipDecompressor : IDecompressor
+    public sealed class GZipDecompressor : IDecompressor
     {
-        protected string SrcPath;
-        protected string DestPath;
-        protected List<DecompressBlockInfo> Blocks;
-        protected List<Thread> Threads;
-
-        public void Decompress(string sourcePath, string destinationPath)
+        public GZipDecompressor(string sourcePath, string destinationPath)
         {
-            SrcPath = sourcePath;
-            DestPath = destinationPath;
+            _srcPath = sourcePath;
+            _destPath = destinationPath;
+            _blocks = BuildDecompressBlockInfo();
+        }
 
-            Blocks = BuildDecompressBlockInfo();
-            Threads = new List<Thread>();
+        /// <summary>
+        /// Decompression completed event.
+        /// </summary>
+        public event Action<TimeSpan> OnCompleted;
 
-            foreach (DecompressBlockInfo block in Blocks)
+        private string _srcPath;
+        private string _destPath;
+        private List<DecompressBlockInfo> _blocks;
+
+
+        /// <summary>
+        /// Main decompression method.
+        /// </summary>
+        public void Decompress()
+        {
+            var t1 = DateTime.Now;
+
+            foreach (DecompressBlockInfo block in _blocks)
             {
-                Thread thr = new Thread(DecompressThreadFunc);
-                Threads.Add(thr);
-                thr.Start(block);
-
-                Console.WriteLine(block);
+                ThreadPool.QueueUserWorkItem(DecompressThreadFunc, block);
             }
 
             Thread thrOutput = new Thread(OutputThreadFunc);
-            thrOutput.Start(Blocks);
+            thrOutput.Start(_blocks);
             thrOutput.Join();
+
+            var t2 = DateTime.Now;
+
+            OnCompleted?.Invoke(t2 - t1);
         }
 
-        protected virtual List<DecompressBlockInfo> BuildDecompressBlockInfo()
+        /// <summary>
+        /// Builds list of source file decompression blocks.
+        /// </summary>
+        /// <remarks>Each decompression block will be decompressed in separate thread.</remarks>
+        private List<DecompressBlockInfo> BuildDecompressBlockInfo()
         {
             List<DecompressBlockInfo> blocks = new List<DecompressBlockInfo>();
 
-            using (FileStream srcStream = new FileStream(SrcPath, FileMode.Open))
+            using (FileStream srcStream = new FileStream(_srcPath, FileMode.Open))
             {
                 byte[] blockCountBuffer = new byte[4];
                 srcStream.Read(blockCountBuffer, 0, 4);
@@ -56,8 +71,8 @@ namespace Dm.Gzippie.Decompressor
 
                     blocks.Add(new DecompressBlockInfo
                     {
-                        SrcPath = this.SrcPath,
-                        DestPath = this.DestPath,
+                        SrcPath = this._srcPath,
+                        DestPath = this._destPath,
                         StartPosition = currStartPos,
                         SizeInBytes = blockSize,
                         TempPath1 = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()),
@@ -72,8 +87,11 @@ namespace Dm.Gzippie.Decompressor
             return blocks;
         }
 
-
-        protected virtual void DecompressThreadFunc(object param)
+        /// <summary>
+        /// Decompresses one given block of source file.
+        /// </summary>
+        /// <param name="param">Instance of <see cref="DecompressBlockInfo"/> class.</param>
+        private void DecompressThreadFunc(object param)
         {
             DecompressBlockInfo block = (DecompressBlockInfo)param;
 
@@ -133,8 +151,11 @@ namespace Dm.Gzippie.Decompressor
             block.BlockProcessedEvent.Set();
         }
 
-
-        protected virtual void OutputThreadFunc(object param)
+        /// <summary>
+        /// Output results of block decompression to destination file.
+        /// </summary>
+        /// <param name="param">List of decompression blocks.</param>
+        private void OutputThreadFunc(object param)
         {
             if (param == null)
             {
@@ -177,12 +198,14 @@ namespace Dm.Gzippie.Decompressor
             }
         }
 
-
+        /// <summary>
+        /// Dispose logic.
+        /// </summary>
         public void Dispose()
         {
-            if (Blocks != null)
+            if (_blocks != null)
             {
-                foreach (DecompressBlockInfo block in Blocks)
+                foreach (DecompressBlockInfo block in _blocks)
                 {
                     try
                     {
@@ -203,7 +226,7 @@ namespace Dm.Gzippie.Decompressor
                     }
                 }
 
-                Blocks = null;
+                _blocks = null;
             }
         }
     }
