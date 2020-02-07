@@ -68,10 +68,10 @@ namespace Dm.Gzippie.App
 
         public virtual void Compress(string srcPath, string destPath)
         {
-            using (ICompressor cmpr = new GZipCompressor())
+            using (ICompressor cmpr = new GZipCompressor(srcPath, destPath))
             {
                 cmpr.OnCompleted += CompressionCompleted;
-                cmpr.Compress(srcPath, destPath);
+                cmpr.Compress();
             }
         }
 

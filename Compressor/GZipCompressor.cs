@@ -17,17 +17,20 @@ namespace Dm.Gzippie.Compressor
 
         public event Action<TimeSpan> OnCompleted;
 
-        /// <summary>
-        /// Compress
-        /// </summary>
-        public void Compress(string sourcePath, string destinationPath)
+        public GZipCompressor(string sourcePath, string destinationPath)
         {
             _srcPath = sourcePath;
             _destPath = destinationPath;
 
             long blockSize = CalculateBlockSize();
             _blocks = BuildBlockInfoList(blockSize);
+        }
 
+        /// <summary>
+        /// Compress
+        /// </summary>
+        public void Compress()
+        {
             var t1 = DateTime.Now;
 
             foreach (CompressBlockInfo block in _blocks)
