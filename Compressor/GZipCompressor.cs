@@ -57,6 +57,8 @@ namespace Dm.Gzippie.Compressor
 
             using (FileStream srcStream = new FileStream(block.SrcPath, FileMode.Open, FileAccess.Read, FileShare.Read))
             {
+                block.TempPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName());
+
                 using (FileStream destStream = new FileStream(block.TempPath, FileMode.OpenOrCreate))
                 {
                     using (GZipStream gzipStream = new GZipStream(destStream, CompressionMode.Compress))
@@ -112,7 +114,7 @@ namespace Dm.Gzippie.Compressor
                     OriginalSizeInBytes = blockSize,
                     SrcPath = _srcPath,
                     DestPath = _destPath,
-                    TempPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()),
+                    // TempPath will be filled in the process of compression
                     BlockProcessedEvent = new ManualResetEvent(false)
                 });
 
@@ -126,7 +128,7 @@ namespace Dm.Gzippie.Compressor
                 OriginalSizeInBytes = remainder,
                 SrcPath = _srcPath,
                 DestPath = _destPath,
-                TempPath = Path.Combine(Path.GetTempPath(), Path.GetTempFileName()),
+                // TempPath will be filled in the process of compression
                 BlockProcessedEvent = new ManualResetEvent(false)
             });
 
