@@ -1,46 +1,29 @@
 ﻿using System;
-using CommandLine;
+using Dm.Gzippie.App.Execution;
 using Dm.Gzippie.Contract;
 using Dm.Gzippie.Compressor;
 using Dm.Gzippie.Decompressor;
 
 namespace Dm.Gzippie.App
 {
-    public class Options
-    {
-        [Option('m', "mode", Required = true, HelpText = "Mode: Compress|Decompress")]
-        public string Mode { get; set; }
-
-        [Option('s', "src", Required = true, HelpText = "Source file path")]
-        public string SourcePath { get; set; }
-
-        [Option('d', "dest", Required = true, HelpText = "Destination file path")]
-        public string DestinationPath { get; set; }
-    }
-
     public class Program
     {
         static int Main(string[] args)
         {
             try
             {
-                Options options = null;
-
-                Parser.Default.ParseArguments<Options>(args)
-                    .WithParsed<Options>((opts) =>
-                    {
-                        options = opts;
-                    });
+                ICommandLineParser parser = new CommandLineParser();
+                ExecutionOptions options = parser.Parse(args);
 
                 if (options != null)
                 {
                     Program app = new Program();
                     
-                    if (options.Mode.Equals("Compress", StringComparison.InvariantCultureIgnoreCase))
+                    if (options.Mode == ExecutionMode.Compress)
                     {
                         app.Compress(options.SourcePath, options.DestinationPath);
                     }
-                    else if (options.Mode.Equals("Decompress", StringComparison.InvariantCultureIgnoreCase))
+                    else if (options.Mode == ExecutionMode.Decompress)
                     {
                         app.Decompress(options.SourcePath, options.DestinationPath);
                     }
