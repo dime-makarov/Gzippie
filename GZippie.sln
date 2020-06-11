@@ -1,15 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2026
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.Gzippie.App", "App\Dm.Gzippie.App.csproj", "{C6AC857E-4925-47EB-87C3-B6C1A130321D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.Gzippie.Contract", "Contract\Dm.Gzippie.Contract.csproj", "{C224A433-C6B2-434D-911F-4AD4C954C0B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.Gzippie.Compressor", "Compressor\Dm.Gzippie.Compressor.csproj", "{D43DE7E6-F465-4227-B3E9-346AFE4568D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.Gzippie.Decompressor", "Decompressor\Dm.Gzippie.Decompressor.csproj", "{D015B7CA-1D75-4A58-B5E3-A0D1E39888C6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dm.Gzippie.Contract", "Contract\Dm.Gzippie.Contract.csproj", "{525F63FA-69D0-4072-97D8-924E9E4171E7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,10 +21,6 @@ Global
 		{C6AC857E-4925-47EB-87C3-B6C1A130321D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C6AC857E-4925-47EB-87C3-B6C1A130321D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C6AC857E-4925-47EB-87C3-B6C1A130321D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C224A433-C6B2-434D-911F-4AD4C954C0B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C224A433-C6B2-434D-911F-4AD4C954C0B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C224A433-C6B2-434D-911F-4AD4C954C0B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C224A433-C6B2-434D-911F-4AD4C954C0B7}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D43DE7E6-F465-4227-B3E9-346AFE4568D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{D43DE7E6-F465-4227-B3E9-346AFE4568D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D43DE7E6-F465-4227-B3E9-346AFE4568D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +29,10 @@ Global
 		{D015B7CA-1D75-4A58-B5E3-A0D1E39888C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D015B7CA-1D75-4A58-B5E3-A0D1E39888C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D015B7CA-1D75-4A58-B5E3-A0D1E39888C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{525F63FA-69D0-4072-97D8-924E9E4171E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{525F63FA-69D0-4072-97D8-924E9E4171E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{525F63FA-69D0-4072-97D8-924E9E4171E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{525F63FA-69D0-4072-97D8-924E9E4171E7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,10 +9,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Dm.Gzippie.Decompressor</RootNamespace>
     <AssemblyName>Dm.Gzippie.Decompressor</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <OutputPath>..\Bin\</OutputPath>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -45,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Contract\Dm.Gzippie.Contract.csproj">
-      <Project>{c224a433-c6b2-434d-911f-4ad4c954c0b7}</Project>
+      <Project>{525f63fa-69d0-4072-97d8-924e9e4171e7}</Project>
       <Name>Dm.Gzippie.Contract</Name>
     </ProjectReference>
   </ItemGroup>

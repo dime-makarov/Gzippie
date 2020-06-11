@@ -8,7 +8,7 @@
     <OutputType>Exe</OutputType>
     <RootNamespace>Dm.Gzippie.App</RootNamespace>
     <AssemblyName>Dm.Gzippie.App</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <OutputPath>..\Bin\</OutputPath>
@@ -60,7 +60,7 @@
       <Name>Dm.Gzippie.Compressor</Name>
     </ProjectReference>
     <ProjectReference Include="..\Contract\Dm.Gzippie.Contract.csproj">
-      <Project>{c224a433-c6b2-434d-911f-4ad4c954c0b7}</Project>
+      <Project>{525f63fa-69d0-4072-97d8-924e9e4171e7}</Project>
       <Name>Dm.Gzippie.Contract</Name>
     </ProjectReference>
     <ProjectReference Include="..\Decompressor\Dm.Gzippie.Decompressor.csproj">
