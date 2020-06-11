@@ -56,7 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Compressor\Dm.Gzippie.Compressor.csproj">
-      <Project>{d43de7e6-f465-4227-b3e9-346afe4568d4}</Project>
+      <Project>{c55a577b-43fe-4439-a396-ffd99a51c67b}</Project>
       <Name>Dm.Gzippie.Compressor</Name>
     </ProjectReference>
     <ProjectReference Include="..\Contract\Dm.Gzippie.Contract.csproj">
@@ -64,7 +64,7 @@
       <Name>Dm.Gzippie.Contract</Name>
     </ProjectReference>
     <ProjectReference Include="..\Decompressor\Dm.Gzippie.Decompressor.csproj">
-      <Project>{d015b7ca-1d75-4a58-b5e3-a0d1e39888c6}</Project>
+      <Project>{bb9f13e4-3d87-4ad3-90c8-b4afae6599dc}</Project>
       <Name>Dm.Gzippie.Decompressor</Name>
     </ProjectReference>
   </ItemGroup>
