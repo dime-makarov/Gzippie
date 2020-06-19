@@ -58,16 +58,16 @@ namespace Dm.Gzippie.Decompressor
 
             using (FileStream srcStream = new FileStream(_srcPath, FileMode.Open))
             {
-                byte[] blockCountBuffer = new byte[4];
-                srcStream.Read(blockCountBuffer, 0, 4);
+                byte[] blockCountBuffer = new byte[sizeof(int)];
+                srcStream.Read(blockCountBuffer, 0, sizeof(int));
                 int blockCount = BitConverter.ToInt32(blockCountBuffer, 0);
 
-                long currStartPos = 4 + (8 * blockCount); // int + (long * blockCount)
+                long currStartPos = sizeof(int) + (sizeof(long) * blockCount);
 
                 for (int i = 0; i < blockCount; i++)
                 {
-                    byte[] blockSizeBuffer = new byte[8];
-                    srcStream.Read(blockSizeBuffer, 0, 8);
+                    byte[] blockSizeBuffer = new byte[sizeof(long)];
+                    srcStream.Read(blockSizeBuffer, 0, sizeof(long));
                     long blockSize = BitConverter.ToInt64(blockSizeBuffer, 0);
 
                     blocks.Add(new DecompressBlockInfo
