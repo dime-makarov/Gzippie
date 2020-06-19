@@ -12,7 +12,7 @@ namespace Dm.Gzippie.App
         {
             try
             {
-                ICommandLineParser parser = new CommandLineParser();
+                ICommandLineParser parser = new VmCommandLineParser();
                 ExecutionOptions options = parser.Parse(args);
 
                 if (options != null)
