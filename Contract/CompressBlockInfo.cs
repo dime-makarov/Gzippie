@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Threading;
 
-namespace Dm.Gzippie.Compressor
+namespace Dm.Gzippie.Contract
 {
     public class CompressBlockInfo
     {
