@@ -3,7 +3,7 @@ using System.Threading;
 
 namespace Dm.Gzippie.Contract
 {
-    public class CompressBlockInfo
+    public class CompressionBlockInfo
     {
         /// <summary>
         ///     Raised when block is processed

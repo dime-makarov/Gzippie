@@ -3,7 +3,7 @@ using Dm.Gzippie.Contract;
 
 namespace Dm.Gzippie.Compressor
 {
-    public class BlockSizeCalculator : IBlockSizeCalculator
+    public class CompressionBlockSizeCalculator : ICompressionBlockSizeCalculator
     {
         /// <summary>
         ///     Max number of compression threads.
@@ -16,11 +16,11 @@ namespace Dm.Gzippie.Compressor
         /// <param name="srcPath"></param>
         public long CalculateBlockSize(string srcPath)
         {
-                var fi = new FileInfo(srcPath);
+            var fi = new FileInfo(srcPath);
 
-                var size = fi.Length / MaxThreads;
+            var size = fi.Length / MaxThreads;
 
-                return size + 1;
+            return size + 1;
         }
     }
 }

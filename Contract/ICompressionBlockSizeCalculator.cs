@@ -1,6 +1,6 @@
 ﻿namespace Dm.Gzippie.Contract
 {
-    public interface IBlockSizeCalculator
+    public interface ICompressionBlockSizeCalculator
     {
         long CalculateBlockSize(string srcPath);
     }

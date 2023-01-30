@@ -9,25 +9,20 @@ namespace Dm.Gzippie.Compressor
 {
     public sealed class GZipCompressor : ICompressor
     {
-        private List<CompressBlockInfo> _blocks;
-        private readonly string _destPath;
-        private readonly IBlockSizeCalculator _blockSizeCalculator;
-
-        private readonly string _srcPath;
+        private List<CompressionBlockInfo> _blocks;
 
         /// <summary>
         ///     Ctor.
         /// </summary>
         /// <param name="sourcePath">Path to the file to compress.</param>
         /// <param name="destinationPath">Path to the file where to compress to.</param>
-        /// <param name="blockSizeCalculator">An IBlockSizeCalculator instance.</param>
-        public GZipCompressor(string sourcePath, string destinationPath, IBlockSizeCalculator blockSizeCalculator)
+        /// <param name="blocksListBuilder">An <see cref="ICompressionBlocksListBuilder" /> instance.</param>
+        public GZipCompressor(
+            string sourcePath,
+            string destinationPath,
+            ICompressionBlocksListBuilder blocksListBuilder)
         {
-            _srcPath = sourcePath;
-            _destPath = destinationPath;
-            _blockSizeCalculator = blockSizeCalculator;
-
-            _blocks = BuildBlockInfoList();
+            _blocks = blocksListBuilder.BuildBlocksList(sourcePath, destinationPath);
         }
 
         /// <summary>
@@ -75,57 +70,12 @@ namespace Dm.Gzippie.Compressor
         }
 
         /// <summary>
-        ///     Builds list of source file compression blocks.
-        /// </summary>
-        /// <remarks>Each compression block will be compressed in separate thread.</remarks>
-        private List<CompressBlockInfo> BuildBlockInfoList()
-        {
-            var blockSize = _blockSizeCalculator.CalculateBlockSize(_srcPath);
-
-            var fi = new FileInfo(_srcPath);
-            var quotinent = fi.Length / blockSize;
-            var remainder = fi.Length % blockSize;
-            var blocks = new List<CompressBlockInfo>((int)quotinent + 1); // cast to int is safe here
-            long startPos = 0;
-            int i;
-
-            for (i = 0; i < quotinent; i++)
-            {
-                blocks.Add(new CompressBlockInfo
-                {
-                    SequenceNumber = i,
-                    StartPosition = startPos,
-                    OriginalSizeInBytes = blockSize,
-                    SrcPath = _srcPath,
-                    DestPath = _destPath,
-                    // TempPath will be filled in the process of compression
-                    BlockProcessedEvent = new ManualResetEvent(false)
-                });
-
-                startPos += blockSize;
-            }
-
-            blocks.Add(new CompressBlockInfo
-            {
-                SequenceNumber = i, // i is already increased
-                StartPosition = startPos,
-                OriginalSizeInBytes = remainder,
-                SrcPath = _srcPath,
-                DestPath = _destPath,
-                // TempPath will be filled in the process of compression
-                BlockProcessedEvent = new ManualResetEvent(false)
-            });
-
-            return blocks;
-        }
-
-        /// <summary>
         ///     Compresses one given block of source file.
         /// </summary>
-        /// <param name="param">Instance of <see cref="CompressBlockInfo" /> class.</param>
+        /// <param name="param">Instance of <see cref="CompressionBlockInfo" /> class.</param>
         private void CompressThreadFunc(object param)
         {
-            var block = (CompressBlockInfo)param;
+            var block = (CompressionBlockInfo)param;
 
             // https://github.com/Microsoft/referencesource/blob/master/mscorlib/system/io/stream.cs#L50
             // We pick a value that is the largest multiple of 4096 that is still smaller than the large object heap threshold (85K).
@@ -172,7 +122,7 @@ namespace Dm.Gzippie.Compressor
         {
             if (param == null) return;
 
-            var blocks = (List<CompressBlockInfo>)param;
+            var blocks = (List<CompressionBlockInfo>)param;
 
             if (blocks.Count == 0) return;
 
