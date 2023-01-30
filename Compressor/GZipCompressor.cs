@@ -9,13 +9,9 @@ namespace Dm.Gzippie.Compressor
 {
     public sealed class GZipCompressor : ICompressor
     {
-        /// <summary>
-        ///     Max number of compression threads.
-        /// </summary>
-        private const int MaxThreads = 4;
-
         private List<CompressBlockInfo> _blocks;
         private readonly string _destPath;
+        private readonly IBlockSizeCalculator _blockSizeCalculator;
 
         private readonly string _srcPath;
 
@@ -24,10 +20,13 @@ namespace Dm.Gzippie.Compressor
         /// </summary>
         /// <param name="sourcePath">Path to the file to compress.</param>
         /// <param name="destinationPath">Path to the file where to compress to.</param>
-        public GZipCompressor(string sourcePath, string destinationPath)
+        /// <param name="blockSizeCalculator">An IBlockSizeCalculator instance.</param>
+        public GZipCompressor(string sourcePath, string destinationPath, IBlockSizeCalculator blockSizeCalculator)
         {
             _srcPath = sourcePath;
             _destPath = destinationPath;
+            _blockSizeCalculator = blockSizeCalculator;
+
             _blocks = BuildBlockInfoList();
         }
 
@@ -81,7 +80,7 @@ namespace Dm.Gzippie.Compressor
         /// <remarks>Each compression block will be compressed in separate thread.</remarks>
         private List<CompressBlockInfo> BuildBlockInfoList()
         {
-            var blockSize = CalculateBlockSize();
+            var blockSize = _blockSizeCalculator.CalculateBlockSize(_srcPath);
 
             var fi = new FileInfo(_srcPath);
             var quotinent = fi.Length / blockSize;
@@ -118,18 +117,6 @@ namespace Dm.Gzippie.Compressor
             });
 
             return blocks;
-        }
-
-        /// <summary>
-        ///     Calculates the size of one compression block.
-        /// </summary>
-        private long CalculateBlockSize()
-        {
-            var fi = new FileInfo(_srcPath);
-
-            var size = fi.Length / MaxThreads;
-
-            return size + 1;
         }
 
         /// <summary>

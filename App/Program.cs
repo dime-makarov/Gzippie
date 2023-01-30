@@ -49,7 +49,7 @@ namespace Dm.Gzippie.App
 
         public virtual void Compress(string srcPath, string destPath)
         {
-            using (ICompressor cmpr = new GZipCompressor(srcPath, destPath))
+            using (ICompressor cmpr = new GZipCompressor(srcPath, destPath, new BlockSizeCalculator()))
             {
                 cmpr.OnCompleted += CompressionCompleted;
                 cmpr.Compress();
